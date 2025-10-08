@@ -1,7 +1,7 @@
 import * as XLSX from "xlsx";
 import jsPDF from "jspdf";
 import autoTable from "jspdf-autotable";
-import { LeadData } from "./apiService";
+import { LeadData } from "@/shared/models/api";
 
 export const exportService = {
   exportToExcel(data: LeadData[], filename: string = "leads.xlsx"): void {

@@ -1,5 +1,6 @@
 'use client';
 
+// * Providers
 import { useLanguage } from '@/shared/providers/LanguageProvider';
 
 export default function PrivacyPolicyPage() {

@@ -1,6 +1,12 @@
 'use client';
 
+// * NextJS
+import Link from 'next/link';
+
+// * Providers
 import { useLanguage } from '@/shared/providers/LanguageProvider';
+
+// * Icons
 import { CheckCircle, Code, Sparkles } from 'lucide-react';
 
 export default function AboutPage() {
@@ -86,12 +92,12 @@ export default function AboutPage() {
             <p className="text-text-inverse mb-6 opacity-90">
               Start extracting valuable business information today
             </p>
-            <a
+            <Link
               href="/"
               className="inline-block bg-background-primary text-accent-primary font-semibold px-8 py-3 rounded-md hover:bg-background-surface transition-colors duration-200"
             >
               Get Started
-            </a>
+            </Link >
           </div>
         </div>
       </div>

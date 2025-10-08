@@ -1,16 +1,17 @@
 'use client';
 
-import { useState } from 'react';
-import { useLanguage } from '@/shared/providers/LanguageProvider';
+// * Icons
 import { ChevronDown } from 'lucide-react';
 
-export default function FAQsPage() {
-  const { t } = useLanguage();
-  const [openIndex, setOpenIndex] = useState<number | null>(null);
+// * MVVM
+import { useFaqs } from './_hooks/useFaqs';
 
-  const toggleQuestion = (index: number) => {
-    setOpenIndex(openIndex === index ? null : index);
-  };
+export default function FAQsPage() {
+  const {
+    t,
+    toggleQuestion,
+    openIndex,
+  } = useFaqs()
 
   return (
     <div className="min-h-screen bg-background-secondary">

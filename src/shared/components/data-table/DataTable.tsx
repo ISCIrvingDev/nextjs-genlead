@@ -1,74 +1,22 @@
 'use client';
 
-import { useState, useMemo } from 'react';
-import { LeadData } from '@/shared/services/apiService';
+// * Icons
 import { Search, ArrowUpDown } from 'lucide-react';
-import { useLanguage } from '@/shared/providers/LanguageProvider';
 
-interface DataTableProps {
-  data: LeadData[];
-}
+// * Props
+import { DataTableProps } from './data-table-props';
 
-type SortField = keyof LeadData | null;
-type SortDirection = 'asc' | 'desc';
+// * MVVM
+import { useDataTable } from './_hooks/useDataTable';
 
 export default function DataTable({ data }: DataTableProps) {
-  const { t } = useLanguage();
-  const [searchTerm, setSearchTerm] = useState('');
-  const [sortField, setSortField] = useState<SortField>(null);
-  const [sortDirection, setSortDirection] = useState<SortDirection>('asc');
-
-  const handleSort = (field: keyof LeadData) => {
-    if (sortField === field) {
-      setSortDirection(sortDirection === 'asc' ? 'desc' : 'asc');
-    } else {
-      setSortField(field);
-      setSortDirection('asc');
-    }
-  };
-
-  const filteredAndSortedData = useMemo(() => {
-    let filtered = data.filter(lead => {
-      const searchLower = searchTerm.toLowerCase();
-      return (
-        lead.companyName.toLowerCase().includes(searchLower) ||
-        lead.phoneNumbers.some(phone => phone.toLowerCase().includes(searchLower)) ||
-        lead.websites.some(website => website.toLowerCase().includes(searchLower)) ||
-        lead.addresses.some(address => address.toLowerCase().includes(searchLower)) ||
-        lead.emails.some(email => email.toLowerCase().includes(searchLower))
-      );
-    });
-
-    if (sortField) {
-      filtered = [...filtered].sort((a, b) => {
-        const aValue = a[sortField];
-        const bValue = b[sortField];
-
-        let aStr = '';
-        let bStr = '';
-
-        if (Array.isArray(aValue)) {
-          aStr = aValue.join(' ').toLowerCase();
-        } else {
-          aStr = String(aValue).toLowerCase();
-        }
-
-        if (Array.isArray(bValue)) {
-          bStr = bValue.join(' ').toLowerCase();
-        } else {
-          bStr = String(bValue).toLowerCase();
-        }
-
-        if (sortDirection === 'asc') {
-          return aStr.localeCompare(bStr);
-        } else {
-          return bStr.localeCompare(aStr);
-        }
-      });
-    }
-
-    return filtered;
-  }, [data, searchTerm, sortField, sortDirection]);
+  const {
+    t,
+    searchTerm,
+    setSearchTerm,
+    handleSort,
+    filteredAndSortedData
+  } = useDataTable({ data })
 
   return (
     <div className="space-y-4">

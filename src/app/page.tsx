@@ -1,64 +1,31 @@
 'use client';
 
-import { useState } from 'react';
-import { useLanguage } from '@/shared/providers/LanguageProvider';
-import { apiService, LeadData } from '@/shared/services/apiService';
-import { attemptService } from '@/shared/services/attemptService';
-import { exportService } from '@/shared/services/exportService';
-import DataTable from '@/shared/components/DataTable';
+// * Components
+import DataTable from '@/shared/components/data-table/DataTable';
 import LimitModal from '@/shared/components/LimitModal';
+
+// * Icons
 import { Search, Download, FileSpreadsheet } from 'lucide-react';
 
+// * MVVM
+import { useHome } from './_hooks/useHome';
+
 export default function HomePage() {
-  const { t } = useLanguage();
-  const [url, setUrl] = useState('');
-  const [loading, setLoading] = useState(false);
-  const [error, setError] = useState('');
-  const [leadsData, setLeadsData] = useState<LeadData[] | null>(null);
-  const [showLimitModal, setShowLimitModal] = useState(false);
-  const [remainingAttempts, setRemainingAttempts] = useState(attemptService.getRemainingAttempts());
-
-  const handleAnalyze = async () => {
-    if (!url.trim()) return;
-
-    if (attemptService.hasReachedLimit()) {
-      setShowLimitModal(true);
-      return;
-    }
-
-    setLoading(true);
-    setError('');
-
-    try {
-      const data = await apiService.analyzeUrl(url);
-      setLeadsData(data);
-      attemptService.incrementAttempts();
-      setRemainingAttempts(attemptService.getRemainingAttempts());
-    } catch (err) {
-      setError(t.home.error);
-      console.error(err);
-    } finally {
-      setLoading(false);
-    }
-  };
-
-  const handleNewAnalysis = () => {
-    setUrl('');
-    setLeadsData(null);
-    setError('');
-  };
-
-  const handleExportExcel = () => {
-    if (leadsData) {
-      exportService.exportToExcel(leadsData);
-    }
-  };
-
-  const handleExportPDF = () => {
-    if (leadsData) {
-      exportService.exportToPDF(leadsData);
-    }
-  };
+  const {
+    leadsData,
+    t,
+    url,
+    setUrl,
+    handleAnalyze,
+    error,
+    loading,
+    remainingAttempts,
+    handleExportExcel,
+    handleExportPDF,
+    handleNewAnalysis,
+    showLimitModal,
+    setShowLimitModal
+  } = useHome()
 
   return (
     <div className="min-h-[calc(100vh-200px)] bg-background-secondary">
@@ -102,8 +69,24 @@ export default function HomePage() {
               </div>
 
               <div className="pt-4 border-t border-borders-light">
-                <p className="text-text-muted text-sm">
+                {/* <p className="text-text-muted text-sm">
                   {t.home.attemptsRemaining}: <span className="text-accent-primary font-semibold">{remainingAttempts}</span>
+                </p> */}
+
+                <p className="text-text-muted text-sm mb-1">
+                  <span className="text-accent-primary font-semibold">{t.home.yellowpages}</span>
+                </p>
+
+                <p className="text-text-muted text-sm">
+                  <a href="https://www.yellowpages.com/search?search_terms=gym&geo_location_terms=Miami+Beach%2C+FL" target='_blank'>Miami - Gyms</a>
+                </p>
+
+                <p className="text-text-muted text-sm">
+                  <a href="https://www.yellowpages.com/new-york-ny/hotels" target='_blank'>NY - Hoteles</a>
+                </p>
+
+                <p className="text-text-muted text-sm">
+                  <a href="https://www.google.com/search?q=USA%2C+Colorado%2C+Durango+gyms&sca_esv=5b739ae8a2b36bde&rlz=1C1UEAD_esMX1068MX1068&biw=2560&bih=1271&tbm=lcl&ei=aw3maPafNcytqtsPqbe_wAY&ved=0ahUKEwi2ga2ShZSQAxXMlmoFHanbD2gQ4dUDCAo&uact=5&oq=USA%2C+Colorado%2C+Durango+gyms&gs_lp=Eg1nd3Mtd2l6LWxvY2FsIhtVU0EsIENvbG9yYWRvLCBEdXJhbmdvIGd5bXMyCBAAGIAEGKIEMggQABiABBiiBDIIEAAYgAQYogQyBRAAGO8FSJ8yUABY5yVwAHgAkAEAmAFzoAG8BKoBAzQuMrgBA8gBAPgBAZgCBaAC6wOYAwCSBwMzLjKgB_0QsgcDMy4yuAfrA8IHAzQuMcgHBA&sclient=gws-wiz-local#rlfi=hd:;si:;mv:[[38.095897099999995,-104.45416589999999],[23.2114561,-108.0892894]]" target='_blank'>USA, Colorado, Durango - Gyms</a>
                 </p>
               </div>
             </div>

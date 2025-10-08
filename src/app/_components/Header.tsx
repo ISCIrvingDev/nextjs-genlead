@@ -1,8 +1,15 @@
 'use client';
 
+// * NextJS
 import Link from 'next/link';
+
+// * Providers
 import { useLanguage } from '@/shared/providers/LanguageProvider';
+
+// * Icons
 import { Globe } from 'lucide-react';
+import Image from 'next/image';
+import icon from '@/shared/assets/Icon.png'
 
 export default function Header() {
   const { language, setLanguage, t } = useLanguage();
@@ -16,6 +23,9 @@ export default function Header() {
       <div className="max-w-7xl mx-auto px-6 py-4">
         <div className="flex items-center justify-between">
           <Link href="/" className="flex items-center space-x-2">
+            <div className="w-10 h-10 rounded-full flex items-center justify-center">
+              <Image src={icon} alt='Icon' quality={100} />
+            </div>
             <div className="text-2xl font-bold">
               <span className="text-accent-primary">Gen</span>
               <span className="text-text-primary">Leads</span>
